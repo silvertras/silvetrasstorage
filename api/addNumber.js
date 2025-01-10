@@ -1,8 +1,8 @@
-const { sendDiscordLog } = require('../../utils/discordWebhook');
+const { sendDiscordLog } = require("../../utils/discordWebhook");
 const dbConnect = require("../../utils/dbConnect");
-const Number = require('../models/numberModel');
+const NumberModel = require("../../models/numberModel");
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     if (req.method === 'POST') {
         try {
             const { number, access } = req.body;
@@ -27,10 +27,5 @@ export default async function handler(req, res) {
 
         } catch (error) {
             console.error('Error adding number:', error);
-            sendDiscordLog(`Error adding number: ${error.message}`);
-            return res.status(500).json({ success: false, message: 'Server Error' });
-        }
-    } else {
-        res.status(405).json({ success: false, message: 'Method Not Allowed' });
-    }
-}
+            sendDiscordLog(`Error adding
+
