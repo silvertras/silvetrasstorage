@@ -1,5 +1,5 @@
-const dbConnect = require("../../utils/dbConnect");
-const NumberModel = require("../../models/numberModel");
+const dbConnect = require("../utils/dbConnect");
+const NumberModel = require("../models/numberModel");
 
 module.exports = async function handler(req, res) {
     if (req.method === 'GET') {
