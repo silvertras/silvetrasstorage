@@ -1,4 +1,4 @@
-import { sendDiscordLog } from "../../utils/discordWebhook";
+const { sendDiscordLog } = require('../../utils/discordWebhook');
 import dbConnect from "../../utils/dbConnect";
 import NumberModel from "../../models/numberModel";
 
