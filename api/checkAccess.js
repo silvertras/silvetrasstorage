@@ -1,21 +1,29 @@
-const { sendDiscordLog } = require('../utils/discordWebhook');
-const Number = require('../models/numberModel');
+import dbConnect from "../../utils/dbConnect";
+import NumberModel from "../../models/numberModel";
 
-module.exports = async (req, res) => {
-    const { number } = req.query;
+export default async function handler(req, res) {
+    if (req.method === 'POST') {
+        try {
+            const { number } = req.body;
 
-    if (!number) return res.status(400).json({ message: 'Number is required.' });
+            if (!number) {
+                return res.status(400).json({ success: false, message: 'Number is required.' });
+            }
 
-    try {
-        const exists = await Number.findOne({ number });
-        if (exists) {
-            sendDiscordLog(`❌ Access denied for number: ${number}`);
-            return res.status(403).json({ message: 'Access denied.' });
+            await dbConnect();
+
+            const numberData = await NumberModel.findOne({ number });
+            if (!numberData) {
+                return res.status(404).json({ success: false, message: 'Number not found.' });
+            }
+
+            return res.status(200).json({ success: true, access: numberData.access });
+
+        } catch (error) {
+            console.error('Error checking access:', error);
+            return res.status(500).json({ success: false, message: 'Server Error' });
         }
-        sendDiscordLog(`✅ Access granted for number: ${number}`);
-        return res.status(200).json({ message: 'Access granted.' });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Internal server error.' });
+    } else {
+        res.status(405).json({ success: false, message: 'Method Not Allowed' });
     }
-};
+}
