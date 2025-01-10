@@ -1,7 +1,7 @@
-import dbConnect from "../../utils/dbConnect";
-import NumberModel from "../../models/numberModel";
+const dbConnect = require("../../utils/dbConnect");
+const NumberModel = require("../../models/numberModel");
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     if (req.method === 'POST') {
         try {
             const { number } = req.body;
@@ -12,12 +12,17 @@ export default async function handler(req, res) {
 
             await dbConnect();
 
-            const numberData = await NumberModel.findOne({ number });
-            if (!numberData) {
+            // Check if number exists
+            const existingNumber = await NumberModel.findOne({ number });
+            if (!existingNumber) {
                 return res.status(404).json({ success: false, message: 'Number not found.' });
             }
 
-            return res.status(200).json({ success: true, access: numberData.access });
+            return res.status(200).json({ 
+                success: true, 
+                message: 'Number found.', 
+                access: existingNumber.access 
+            });
 
         } catch (error) {
             console.error('Error checking access:', error);
@@ -26,4 +31,4 @@ export default async function handler(req, res) {
     } else {
         res.status(405).json({ success: false, message: 'Method Not Allowed' });
     }
-}
+};
