@@ -1,13 +1,16 @@
-// /utils/discordWebhook.js
-
-const fetch = require('node-fetch'); // jika menggunakan CommonJS, pastikan menggunakan require
-require('dotenv').config();  // Pastikan .env sudah ada di root folder
+require('dotenv').config();
 
 const sendDiscordLog = async (message) => {
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-    if (!webhookUrl) return console.error('Discord webhook URL not configured.');
+    if (!webhookUrl) {
+        console.error('Discord webhook URL not configured.');
+        return;
+    }
 
     try {
+        // Gunakan dynamic import untuk node-fetch
+        const fetch = (await import('node-fetch')).default;
+
         await fetch(webhookUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
