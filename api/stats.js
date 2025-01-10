@@ -1,15 +1,13 @@
-import dbConnect from "../../utils/dbConnect";
-import NumberModel from "../../models/numberModel";
+const dbConnect = require("../../utils/dbConnect");
+const NumberModel = require("../../models/numberModel");
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     if (req.method === 'GET') {
         try {
             await dbConnect();
 
             const totalNumbers = await NumberModel.countDocuments();
-            const activeNumbers = await NumberModel.countDocuments({ access: true });
-
-            return res.status(200).json({ success: true, stats: { totalNumbers, activeNumbers } });
+            return res.status(200).json({ success: true, totalNumbers });
 
         } catch (error) {
             console.error('Error fetching stats:', error);
@@ -18,4 +16,4 @@ export default async function handler(req, res) {
     } else {
         res.status(405).json({ success: false, message: 'Method Not Allowed' });
     }
-}
+};
