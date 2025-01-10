@@ -27,5 +27,10 @@ module.exports = async function handler(req, res) {
 
         } catch (error) {
             console.error('Error adding number:', error);
-            sendDiscordLog(`Error adding
-
+            sendDiscordLog(`Error adding number: ${error.message}`);
+            return res.status(500).json({ success: false, message: 'Server Error' });
+        }
+    } else {
+        res.status(405).json({ success: false, message: 'Method Not Allowed' });
+    }
+};
