@@ -1,6 +1,6 @@
 const { sendDiscordLog } = require('../../utils/discordWebhook');
-import dbConnect from "../../utils/dbConnect";
-import NumberModel from "../../models/numberModel";
+const dbConnect = require("../../utils/dbConnect");
+const Number = require('../models/numberModel');
 
 export default async function handler(req, res) {
     if (req.method === 'POST') {
